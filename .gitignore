@@ -1,0 +1,4 @@
+
+results/
+test_config/__pycache__/
+*.pyc
