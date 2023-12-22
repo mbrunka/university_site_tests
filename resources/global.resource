@@ -49,7 +49,22 @@ Verify Link Is Redicrecting To Correct Page And It Loads
     Should Be True    ${is_page_loaded}    The page did not load completely
     Go Back
 
+Open URL In New Window And Verify It Loads Webpage
+    [Arguments]    ${url}
+    Open Browser    ${url}    ${BROWSER}
+    ${is_page_loaded}=    Execute Javascript    return document.readyState === 'complete'
+    Should Be True    ${is_page_loaded}    The page did not load completely
+    Close Browser
+
 Get Current URL And Verify
     [Arguments]    ${expected_url}
     ${current_url}    Get Location
     Should Be Equal    ${current_url}    ${expected_url}
+
+Verify All Links On Current Webpage Are Working
+    @{links}    Get WebElements    xpath://a
+    FOR    ${link}    IN    @{links}
+        ${href}    Get Element Attribute    ${link}    href
+        IF    $href == None or $href == ""   CONTINUE
+        Open URL In New Window And Verify It Loads Webpage    ${href}
+    END

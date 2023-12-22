@@ -12,7 +12,7 @@ Change Main Page Language
     ELSE
         Click Element    link:${short_name}
     END
-    Sleep    2s    
+    Sleep    2s
 
 Verify That Menu Is In Expected Language
     [Arguments]    @{main_menu}

@@ -42,4 +42,10 @@ Verify semester schedule for current semester
     ELSE
         Should Contain    ${xml}    ${current_year_string}    semestr letni
     END
-    [Teardown]    Run Keywords    Close Browser    AND    Empty Directory    ${TEMP_FOLDER} 
+    [Teardown]    Run Keywords    Close Browser    AND    Empty Directory    ${TEMP_FOLDER}
+
+Verify that all links on main page are working
+    [Tags]    long
+    Open Browser      ${FACULTY_PAGE}    ${BROWSER}
+    Verify All Links On Current Webpage Are Working
+    [Teardown]    Close Browser

@@ -37,6 +37,6 @@ Sending and Reciving email
     Press Keys    //body    CONTROL+ENTER
     Sleep    2
     #Verify email is resived and it's content
-    Wait Until Keyword Succeeds    60    10    Click Element    //*[contains(@aria-label, 'Test ${test_number}')]    
+    Wait Until Keyword Succeeds    60    10    Click Element    //*[contains(@aria-label, 'Test ${test_number}')]
     Element Should Contain    //html/body/    ${content}
     [Teardown]    Close Browser

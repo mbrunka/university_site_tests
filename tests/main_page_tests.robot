@@ -7,7 +7,7 @@ Resource    ../resources/main_page_releated.resource
 
 Variables    ../test_config/variables.py
 Variables    ../test_config/dict.py
-    
+
 
 *** Test Cases ***
 Verify language menu change
@@ -73,4 +73,10 @@ Verify path to eKursy
     Click Element    //*[@id="uc_subtle_overlay_content_box_elementor_8602fd2"]
     Click Element    //*[@id="post-543"]/div/section[2]/div/div[4]/div/div/div/div/a
     Page Should Contain    Click the image below to log in.
+    [Teardown]    Close Browser
+
+Verify that all links on main page are working
+    [Tags]    long
+    Open Browser      ${FACULTY_PAGE}    ${BROWSER}
+    Verify All Links On Current Webpage Are Working
     [Teardown]    Close Browser
