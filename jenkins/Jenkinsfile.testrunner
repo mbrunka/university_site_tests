@@ -1,0 +1,94 @@
+pipeline {
+    agent {
+        label 'win-agent'
+    }
+    parameters {
+        string(name: 'REPO_BRANCH',
+               defaultValue: 'main',
+               description: 'From which branch to run the tests')
+        booleanParam(name: 'MAIN_PAGE_TESTS',
+                     defaultValue: true,
+                     description: 'Run main webpage tests if true')
+        booleanParam(name: 'MAIL_PAGE_TESTS',
+                     defaultValue: false,
+                     description: 'Run mail webpage tests if true')
+        booleanParam(name: 'FACULTY_PAGE_TESTS',
+                     defaultValue: true,
+                     description: 'Run faculty webpage tests if true')
+        string(name: 'ROBOT_PARAMS',
+               defaultValue: '--exclude intrusive',
+               description: 'extra robot params passed to the robot command for every test')
+        choice(name: 'CHOICE', choices: ['One', 'Two', 'Three'], description: 'Pick something')
+        password(name: 'PASSWORD', defaultValue: 'SECRET', description: 'Enter a password')
+    }
+    stages {
+        stage('Env Preparation') {
+            steps {
+                echo 'Hello World'
+                bat '''
+              python --version
+              pip install --upgrade robotframework
+              pip install --upgrade robotframework-seleniumlibrary
+            '''
+            }
+        }
+        stage('Get Repo') {
+            steps {
+                git branch: '${params.REPO_BRANCH}', url: 'https://github.com/mbrunka/university_site_tests'
+            }
+        }
+        stage('Run Main Webpage Tests') {
+            when { expression { params.MAIN_PAGE_TESTS == true } }
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    bat '''
+                        python -m robot ^
+                        --log ./results/main_page_test.log ^
+                        --report ./results/main_page_test.html ^
+                        --output ./results/main_page_test.xml ^
+                        --variablefile C:/Jenkins/secret.py ^
+                        ${params.ROBOT_PARAMS} ^
+                        ./tests/main_page_tests.robot ^
+                    '''
+                }
+            }
+        }
+        stage('Run Mail Webpage Tests') {
+            when { expression { params.MAIL_PAGE_TESTS == true } }
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    bat '''
+                        python -m robot ^
+                        --log ./results/mail_page_test.log ^
+                        --report ./results/mail_page_test.html ^
+                        --output ./results/mail_page_test.xml ^
+                        --variablefile C:/Jenkins/secret.py ^
+                        ${params.ROBOT_PARAMS} ^
+                        ./tests/mail_page_tests.robot ^
+                    '''
+                }
+            }
+        }
+        stage('Run Faculty Webpage Tests') {
+            when { expression { params.FACULTY_PAGE_TESTS == true } }
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    bat '''
+                        python -m robot ^
+                        --log ./results/faculty_page_test.log ^
+                        --report ./results/faculty_page_test.html ^
+                        --output ./results/faculty_page_test.xml ^
+                        --variablefile C:/Jenkins/secret.py ^
+                        ${params.ROBOT_PARAMS} ^
+                        ./tests/faculty_page_tests.robot ^
+                    '''
+                }
+            }
+        }
+        stage('Publish Robot Framework Report') {
+            steps {
+                robot archiveDirName: 'robot-plugin', outputPath: './results', overwriteXAxisLabel: ''
+            }
+        }
+    }
+}

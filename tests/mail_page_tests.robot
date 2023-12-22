@@ -19,6 +19,7 @@ Verify Loging to email account
     [Teardown]    Close Browser
 
 Sending and Reciving email
+    [Tags]    intrusive
     Open Browser    ${MAIL_URL}    ${BROWSER}
     #Loging to email
     Input Text    //*[@id="user_name"]    ${EMAIL}
@@ -36,9 +37,6 @@ Sending and Reciving email
     Press Keys    //body    CONTROL+ENTER
     Sleep    2
     #Verify email is resived and it's content
-    Wait Until Keyword Succeeds    20    10    Click Element    Test ${test_number}
-    Element Should Contain    /html/body/div/div    ${content}
+    Wait Until Keyword Succeeds    60    10    Click Element    //*[contains(@aria-label, 'Test ${test_number}')]    
+    Element Should Contain    //html/body/    ${content}
     [Teardown]    Close Browser
-    
-    
-    

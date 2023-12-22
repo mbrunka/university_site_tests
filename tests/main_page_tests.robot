@@ -3,6 +3,7 @@ Library    SeleniumLibrary
 Library    ../libraries/number.py
 
 Resource    ../resources/global.resource
+Resource    ../resources/main_page_releated.resource
 
 Variables    ../test_config/variables.py
 Variables    ../test_config/dict.py
@@ -55,34 +56,21 @@ Verify basic search function
     Click Element    //*[@id="search-block-form"]/div[1]/div/span/button
     Sleep    2s
     Page Should Not Contain    Brak wyników spełniających kryteria twojego wyszukiwania
-    ${current_url}    Get Location
-    Should Be Equal    ${current_url}    https://www.put.poznan.pl/search/node?keys=brandshop
+    Get Current URL And Verify    https://www.put.poznan.pl/search/node?keys=brandshop
     [Teardown]    Close Browser
 
+Verify path to faculty page
+    Open Browser    ${MAIN_PAGE_URL}    ${BROWSER}
+    Click Element    //*[@id="block-mainnavigationpl-2"]/ul/li[1]/a
+    Click Element    //*[@id="block-mainnavigationpl-2"]/ul/li[1]/ul/li[5]/ul/li[1]/a
+    Click Element    //html/body/div[1]/div/div[1]/section/div/article/div/div/div[2]/section[2]/div/div[3]/div/div/a
+    [Teardown]    Close Browser
 
-*** Keywords ***
-Change Main Page Language
-    [Arguments]    ${short_name}
-    IF  $short_name == "EN"
-        Click Element    //*[@id="block-przelacznikwersjijezykowej-2"]/ul/li[2]/a
-    ELSE
-        Click Element    link:${short_name}
-    END
-    Sleep    2s    
-
-Verify That Menu Is In Expected Language
-    [Arguments]    @{main_menu}
-    Element Should Contain Every    //*[@id="navbar-collapse"]/div    @{main_menu}
-
-Verify Link Is Redicrecting To Correct Page And It Loads
-    [Arguments]    ${link}    ${expected_url}
-    Click Element    ${link}
-    Sleep    2s
-    ${current_url}    Get Location
-    IF    $current_url == $expected_url
-        Log    Manual verification needed, page could redicrect to login page!    console=${True}
-    END
-    ${is_page_loaded}=    Execute Javascript    return document.readyState === 'complete'
-    Should Be True    ${is_page_loaded}    The page did not load completely
-    Go Back
-    
+Verify path to eKursy
+    Open Browser    ${MAIN_PAGE_URL}    ${BROWSER}
+    Click Element    //*[@id="block-mainnavigationpl-2"]/ul/li[5]/a
+    Click Element    //*[@id="block-mainnavigationpl-2"]/ul/li[5]/ul/li[2]/ul/li[4]/a
+    Click Element    //*[@id="uc_subtle_overlay_content_box_elementor_8602fd2"]
+    Click Element    //*[@id="post-543"]/div/section[2]/div/div[4]/div/div/div/div/a
+    Page Should Contain    Click the image below to log in.
+    [Teardown]    Close Browser
