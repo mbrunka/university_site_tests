@@ -25,31 +25,33 @@ pipeline {
         stage('Env Preparation') {
             steps {
                 echo 'Hello World'
-                bat '''
-              python --version
-              pip install --upgrade robotframework
-              pip install --upgrade robotframework-seleniumlibrary
-            '''
+                bat """
+                    python --version
+                    pip install --upgrade robotframework
+                    pip install --upgrade robotframework-seleniumlibrary
+                    pip install --upgrade pdfquery
+                    pip install --upgrade six
+                """
             }
         }
         stage('Get Repo') {
             steps {
-                git branch: '${params.REPO_BRANCH}', url: 'https://github.com/mbrunka/university_site_tests'
+                git branch: params.REPO_BRANCH, url: 'https://github.com/mbrunka/university_site_tests'
             }
         }
         stage('Run Main Webpage Tests') {
             when { expression { params.MAIN_PAGE_TESTS == true } }
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    bat '''
+                    bat """
                         python -m robot ^
-                        --log ./results/main_page_test.log ^
-                        --report ./results/main_page_test.html ^
-                        --output ./results/main_page_test.xml ^
+                        --log ./results/main_page_tests_log.html ^
+                        --report ./results/main_page_tests_report.html ^
+                        --output ./results/main_page_tests_output.xml ^
                         --variablefile C:/Jenkins/secret.py ^
                         ${params.ROBOT_PARAMS} ^
                         ./tests/main_page_tests.robot ^
-                    '''
+                    """
                 }
             }
         }
@@ -57,15 +59,15 @@ pipeline {
             when { expression { params.MAIL_PAGE_TESTS == true } }
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    bat '''
+                    bat """
                         python -m robot ^
-                        --log ./results/mail_page_test.log ^
-                        --report ./results/mail_page_test.html ^
-                        --output ./results/mail_page_test.xml ^
+                        --log ./results/mail_page_tests_log.html ^
+                        --report ./results/mail_page_tests_report.html ^
+                        --output ./results/mail_page_tests_output.xml ^
                         --variablefile C:/Jenkins/secret.py ^
                         ${params.ROBOT_PARAMS} ^
                         ./tests/mail_page_tests.robot ^
-                    '''
+                    """
                 }
             }
         }
@@ -73,21 +75,31 @@ pipeline {
             when { expression { params.FACULTY_PAGE_TESTS == true } }
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    bat '''
+                    bat """
                         python -m robot ^
-                        --log ./results/faculty_page_test.log ^
-                        --report ./results/faculty_page_test.html ^
-                        --output ./results/faculty_page_test.xml ^
+                        --log ./results/faculty_page_tests_log.html ^
+                        --report ./results/faculty_page_tests_report.html ^
+                        --output ./results/faculty_page_tests_output.xml ^
                         --variablefile C:/Jenkins/secret.py ^
                         ${params.ROBOT_PARAMS} ^
                         ./tests/faculty_page_tests.robot ^
-                    '''
+                    """
                 }
             }
         }
         stage('Publish Robot Framework Report') {
             steps {
-                robot archiveDirName: 'robot-plugin', outputPath: './results', overwriteXAxisLabel: ''
+                step([
+                    $class : 'RobotPublisher',
+                    outputPath : './results/',
+                    outputFileName : '*_output.xml',
+                    logFileName: '*_log.html',
+                    reportFileName: '*_report.html',
+                    disableArchiveOutput : false,
+                    passThreshold : 98.0,
+                    unstableThreshold: 80.0,
+                    otherFiles : '*.png'
+                ])
             }
         }
     }

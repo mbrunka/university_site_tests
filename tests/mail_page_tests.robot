@@ -3,28 +3,62 @@ Library    SeleniumLibrary
 Library    ../libraries/number.py
 
 Resource    ../resources/global.resource
+Resource    ../resources/mail_page_related.resource
+Resource    ../resources/esystem_related.resource
 
 Variables    ../test_config/variables.py
 
 
 *** Test Cases ***
-Verify Loging to email account
+Verify Loging to email account using wrong email address
     Open Browser    ${MAIL_URL}    ${BROWSER}
-    #Loging to email
-    Input Text    //*[@id="user_name"]    ${EMAIL}
-    Input Password    //*[@id="user_password"]    ${PASSWD}
-    Click Button    Zaloguj
+    Login To Mail    wrong_email@email.pl    wrong_password
+    Sleep    2
+    Page Should Contain    Nieznana nazwa użytkownika.
+    [Teardown]    Close Browser
+
+
+Verify Loging to email account using wrong password
+    Open Browser    ${MAIL_URL}    ${BROWSER}
+    Login To Mail    ${EMAIL}    wrong_password
+    Sleep    2
+    Page Should Contain    Nieznana nazwa użytkownika lub złe hasło.
+    [Teardown]    Close Browser
+
+Verify Loging to email account using normal method
+    Open Browser    ${MAIL_URL}    ${BROWSER}
+    Login To Mail    ${EMAIL}    ${PASSWD}
     Sleep    2
     Page Should Not Contain    Nieznana nazwa użytkownika
+    Get Current URL And Verify    https://poczta.student.put.poznan.pl/zimbra/mail#1
+    [Teardown]    Close Browser
+
+Verify Loging to email account using eSystem
+    Open Browser    ${MAIL_URL}    ${BROWSER}
+    Click Element    //html/body/section/div[1]/form/div[3]/div/a
+    Login By eSystem    ${EMAIL}    ${PASSWD}
+    Sleep    10
+    Page Should Not Contain    Nieznana nazwa użytkownika
+    Get Current URL And Verify    https://poczta.student.put.poznan.pl/zimbra/mail#1
+    [Teardown]    Close Browser
+
+Verify logout works
+    Open Browser    ${MAIL_URL}    ${BROWSER}
+    Login To Mail    ${EMAIL}    ${PASSWD}
+    Sleep    2
+    Click Element    //*[@id="DWT27"]
+    Sleep    1
+    Click Element    //*[@id="logOff"]
+    Sleep    2
+    Get Current URL And Verify    https://elogin.put.poznan.pl/email/?logout
+    Page Should Contain Textfield    //*[@id="user_name"]
+    Page Should Contain Textfield    //*[@id="user_password"]
     [Teardown]    Close Browser
 
 Sending and Reciving email
     [Tags]    intrusive
     Open Browser    ${MAIL_URL}    ${BROWSER}
-    #Loging to email
-    Input Text    //*[@id="user_name"]    ${EMAIL}
-    Input Password    //*[@id="user_password"]    ${PASSWD}
-    Click Button    Zaloguj
+    Login To Mail    ${EMAIL}    ${PASSWD}
     Sleep    2
     #Send email
     Press Keys    //*[@id="ztb__NEW_MENU"]    n+m

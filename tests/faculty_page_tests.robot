@@ -9,6 +9,7 @@ Resource    ../resources/global.resource
 Resource    ../resources/main_page_releated.resource
 
 Variables    ../test_config/variables.py
+Variables    ../test_config/faculty_variables.py
 
 *** Test Cases ***
 Verify quick path to main webpage
@@ -44,8 +45,35 @@ Verify semester schedule for current semester
     END
     [Teardown]    Run Keywords    Close Browser    AND    Empty Directory    ${TEMP_FOLDER}
 
-Verify that all links on main page are working
-    [Tags]    long
-    Open Browser      ${FACULTY_PAGE}    ${BROWSER}
-    Verify All Links On Current Webpage Are Working
-    [Teardown]    Close Browser
+Verify week schedule for current semester
+    Open Browser      ${ICT_STUDENT_PAGE}    ${BROWSER}
+    FOR  ${class}  IN  @{WEEK_SCHEDULE_XPATH}[${CURRENT_SEMESTER}]
+        ${schedule_url}    Get Element Attribute
+        ...    ${WEEK_SCHEDULE_XPATH}[${CURRENT_SEMESTER}][${class}]
+        ...    href
+        Run Process    curl.exe    -o    ${TEMP_FOLDER}/${class}.pdf    ${schedule_url}
+        Convert PDF To XML Format    ${TEMP_FOLDER}/${class}.pdf    ${TEMP_FOLDER}/${class}.xml
+        ${xml}    Get File    ${TEMP_FOLDER}/${class}.xml
+        Should Contain Every    ${xml}    TYGODNIOWY PLAN ZAJĘĆ    semestr ${class}
+    END
+    [Teardown]    Run Keywords    Close Browser    AND    Empty Directory    ${TEMP_FOLDER}
+
+Verify week schedule for not current semester are not available
+    Open Browser      ${ICT_STUDENT_PAGE}    ${BROWSER}
+    IF    $CURRENT_SEMESTER == 'WINTER'
+        ${not_current_semester}    Set Variable    SUMMER
+    ELSE IF    $CURRENT_SEMESTER == 'SUMMER'
+        ${not_current_semester}    Set Variable    WINTER
+    ELSE
+        FAIL    WRONG CURRENT_SEMESTER VALUE
+    END
+    FOR  ${class}  IN  @{WEEK_SCHEDULE_XPATH}[${not_current_semester}]
+        ${schedule_url}    Get Element Attribute
+        ...    ${WEEK_SCHEDULE_XPATH}[${not_current_semester}][${class}]
+        ...    href
+        Run Process    curl.exe    -o    ${TEMP_FOLDER}/${class}.pdf    ${schedule_url}
+        Convert PDF To XML Format    ${TEMP_FOLDER}/${class}.pdf    ${TEMP_FOLDER}/${class}.xml
+        ${xml}    Get File    ${TEMP_FOLDER}/${class}.xml
+        Should Not Contain Any    ${xml}    TYGODNIOWY PLAN ZAJĘĆ    semestr ${class}
+    END
+    [Teardown]    Run Keywords    Close Browser    AND    Empty Directory    ${TEMP_FOLDER}
