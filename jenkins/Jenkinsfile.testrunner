@@ -6,6 +6,9 @@ pipeline {
         string(name: 'REPO_BRANCH',
                defaultValue: 'main',
                description: 'From which branch to run the tests')
+        booleanParam(name: 'UPGRADE',
+                     defaultValue: false,
+                     description: 'Upgrade python librarys if true')
         booleanParam(name: 'MAIN_PAGE_TESTS',
                      defaultValue: true,
                      description: 'Run main webpage tests if true')
@@ -15,14 +18,34 @@ pipeline {
         booleanParam(name: 'FACULTY_PAGE_TESTS',
                      defaultValue: true,
                      description: 'Run faculty webpage tests if true')
-        string(name: 'ROBOT_PARAMS',
+        booleanParam(name: 'EKURSY_TESTS',
+                     defaultValue: true,
+                     description: 'Run eKursy webpage tests if true')
+        choice(name: 'LOG_LEVEL',
+               choices: ['TRACE', 'DEBUG', 'INFO'],
+               description: 'Pick a log level for the robot command')
+        choice(name: 'BROWSER',
+               choices: ['Edge', 'Chrome', 'Firefox'],
+               description: 'Pick a browser in which to run the tests')
+        choice(name: 'SEMSESTER',
+               choices: ['WINTER', 'SUMMER'],
+               description: 'Pick a current semseter, applys only to faculty page tests')
+        string(name: 'EXTRA_ROBOT_PARAMS',
                defaultValue: '--exclude intrusive',
                description: 'extra robot params passed to the robot command for every test')
-        choice(name: 'CHOICE', choices: ['One', 'Two', 'Three'], description: 'Pick something')
-        password(name: 'PASSWORD', defaultValue: 'SECRET', description: 'Enter a password')
+        choice(name: 'LOGIN_DATA',
+               choices: ['Exisitng', 'Passed'],
+               description: 'Pick either to use existing on the Jenkins agent login data or passed as parameters')
+        string(name: 'USERNAME',
+               defaultValue: '',
+               description: 'Enter a username, ignored if LOGIN_DATA is set to Existing')
+        password(name: 'PASSWORD',
+                 defaultValue: '',
+                 description: 'Enter a password, ignored if LOGIN_DATA is set to Existing')
     }
     stages {
-        stage('Env Preparation') {
+        stage('Upgrade Python Librarys') {
+            when { expression { params.UPGRADE == true } }
             steps {
                 echo 'Hello World'
                 bat """
@@ -39,6 +62,19 @@ pipeline {
                 git branch: params.REPO_BRANCH, url: 'https://github.com/mbrunka/university_site_tests'
             }
         }
+        stage('Test Setup') {
+            steps {
+                def combinedParams = ''
+                if (params.LOGIN_DATA == 'Existing') {
+                    combinedParams = '--variablefile C:/Jenkins/secret.py'
+                } else {
+                    combinedParams = "--variable USERNAME:${params.USERNAME} --variable PASSWORD:${params.PASSWORD}"
+                }
+                combinedParams += " --variable SEMESTER:${params.SEMESTER}"
+                combinedParams += " --variable BROWSER:${params.BROWSER}"
+
+            }
+        }
         stage('Run Main Webpage Tests') {
             when { expression { params.MAIN_PAGE_TESTS == true } }
             steps {
@@ -49,7 +85,9 @@ pipeline {
                         --report ./results/main_page_tests_report.html ^
                         --output ./results/main_page_tests_output.xml ^
                         --variablefile C:/Jenkins/secret.py ^
-                        ${params.ROBOT_PARAMS} ^
+                        --loglevel ${params.LOG_LEVEL}:INFO ^
+                        ${combinedParams} ^
+                        ${params.EXTRA_ROBOT_PARAMS} ^
                         ./tests/main_page_tests.robot ^
                     """
                 }
@@ -65,7 +103,9 @@ pipeline {
                         --report ./results/mail_page_tests_report.html ^
                         --output ./results/mail_page_tests_output.xml ^
                         --variablefile C:/Jenkins/secret.py ^
-                        ${params.ROBOT_PARAMS} ^
+                        --loglevel ${params.LOG_LEVEL}:INFO ^
+                        ${combinedParams} ^
+                        ${params.EXTRA_ROBOT_PARAMS} ^
                         ./tests/mail_page_tests.robot ^
                     """
                 }
@@ -81,8 +121,28 @@ pipeline {
                         --report ./results/faculty_page_tests_report.html ^
                         --output ./results/faculty_page_tests_output.xml ^
                         --variablefile C:/Jenkins/secret.py ^
-                        ${params.ROBOT_PARAMS} ^
+                        --loglevel ${params.LOG_LEVEL}:INFO ^
+                        ${combinedParams} ^
+                        ${params.EXTRA_ROBOT_PARAMS} ^
                         ./tests/faculty_page_tests.robot ^
+                    """
+                }
+            }
+        }
+        stage('Run eKursy Webpage Tests') {
+            when { expression { params.EKURSY_TESTS == true } }
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    bat """
+                        python -m robot ^
+                        --log ./results/ekursy_page_tests_log.html ^
+                        --report ./results/ekursy_page_tests_report.html ^
+                        --output ./results/ekursy_page_tests_output.xml ^
+                        --variablefile C:/Jenkins/secret.py ^
+                        --loglevel ${params.LOG_LEVEL}:INFO ^
+                        ${combinedParams} ^
+                        ${params.EXTRA_ROBOT_PARAMS} ^
+                        ./tests/ekursy_tests.robot ^
                     """
                 }
             }

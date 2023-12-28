@@ -1,5 +1,6 @@
 *** Settings ***
 Library           SeleniumLibrary
+Resource          ../resources/selenium_releted.resource
 
 *** Keywords ***
 Login To Mail

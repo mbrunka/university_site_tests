@@ -4,6 +4,7 @@ Library    ../libraries/number.py
 
 Resource    ../resources/global.resource
 Resource    ../resources/main_page_releated.resource
+Resource    ../resources/selenium_releted.resource
 
 Variables    ../test_config/variables.py
 Variables    ../test_config/dict.py

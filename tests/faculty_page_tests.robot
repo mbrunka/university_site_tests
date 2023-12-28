@@ -7,6 +7,7 @@ Library           ../libraries/pdf_keywords.py
 
 Resource    ../resources/global.resource
 Resource    ../resources/main_page_releated.resource
+Resource    ../resources/selenium_releted.resource
 
 Variables    ../test_config/variables.py
 Variables    ../test_config/faculty_variables.py

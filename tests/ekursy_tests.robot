@@ -3,6 +3,7 @@ Library           SeleniumLibrary
 
 Resource          ../resources/esystem_related.resource
 Resource          ../resources/global.resource
+Resource          ../resources/selenium_releted.resource
 
 Variables    ../test_config/variables.py
 
@@ -11,7 +12,7 @@ Login to eKursy with invalid password
     Open Browser    ${EKURSY_URL}    ${BROWSER}
     Click Element    //*[@id="region-main"]/div[2]/div[2]/div/div[1]/div[2]/div/a
     Login By eSystem    ${EMAIL}    invalid_password
-    Page Should Contain    Podano nieprawidłowe hasło.
+    Page Should Contain Any    Podano nieprawidłowe hasło.    Incorrect password provided.
     [Teardown]    Close Browser
 
 Login to eKursy with valid password

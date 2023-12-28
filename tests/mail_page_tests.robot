@@ -5,6 +5,7 @@ Library    ../libraries/number.py
 Resource    ../resources/global.resource
 Resource    ../resources/mail_page_related.resource
 Resource    ../resources/esystem_related.resource
+Resource    ../resources/selenium_releted.resource
 
 Variables    ../test_config/variables.py
 
@@ -14,7 +15,7 @@ Verify Loging to email account using wrong email address
     Open Browser    ${MAIL_URL}    ${BROWSER}
     Login To Mail    wrong_email@email.pl    wrong_password
     Sleep    2
-    Page Should Contain    Nieznana nazwa użytkownika.
+    Page Should Contain Any    Nieznana nazwa użytkownika.    Unknown username.
     [Teardown]    Close Browser
 
 
@@ -22,14 +23,14 @@ Verify Loging to email account using wrong password
     Open Browser    ${MAIL_URL}    ${BROWSER}
     Login To Mail    ${EMAIL}    wrong_password
     Sleep    2
-    Page Should Contain    Nieznana nazwa użytkownika lub złe hasło.
+    Page Should Contain Any    Nieznana nazwa użytkownika lub złe hasło.    Unknown username or bad password.
     [Teardown]    Close Browser
 
 Verify Loging to email account using normal method
     Open Browser    ${MAIL_URL}    ${BROWSER}
     Login To Mail    ${EMAIL}    ${PASSWD}
     Sleep    2
-    Page Should Not Contain    Nieznana nazwa użytkownika
+    Page Should Not Contain Any    Nieznana nazwa użytkownika    Unknown username
     Get Current URL And Verify    https://poczta.student.put.poznan.pl/zimbra/mail#1
     [Teardown]    Close Browser
 
@@ -38,7 +39,7 @@ Verify Loging to email account using eSystem
     Click Element    //html/body/section/div[1]/form/div[3]/div/a
     Login By eSystem    ${EMAIL}    ${PASSWD}
     Sleep    10
-    Page Should Not Contain    Nieznana nazwa użytkownika
+    Page Should Not Contain Any    Nieznana nazwa użytkownika    Unknown username
     Get Current URL And Verify    https://poczta.student.put.poznan.pl/zimbra/mail#1
     [Teardown]    Close Browser
 

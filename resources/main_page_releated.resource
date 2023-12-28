@@ -3,6 +3,8 @@ Library    SeleniumLibrary
 Library    ../libraries/number.py
 
 Resource    ../resources/global.resource
+Resource    ../resources/selenium_releted.resource
+
 
 *** Keywords ***
 Change Main Page Language
