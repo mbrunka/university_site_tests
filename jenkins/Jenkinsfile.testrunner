@@ -27,21 +27,24 @@ pipeline {
         choice(name: 'BROWSER',
                choices: ['Edge', 'Chrome', 'Firefox'],
                description: 'Pick a browser in which to run the tests')
-        choice(name: 'SEMSESTER',
+        choice(name: 'SEMESTER',
                choices: ['WINTER', 'SUMMER'],
                description: 'Pick a current semseter, applys only to faculty page tests')
         string(name: 'EXTRA_ROBOT_PARAMS',
                defaultValue: '--exclude intrusive',
                description: 'extra robot params passed to the robot command for every test')
         choice(name: 'LOGIN_DATA',
-               choices: ['Exisitng', 'Passed'],
+               choices: ['Existing', 'Passed'],
                description: 'Pick either to use existing on the Jenkins agent login data or passed as parameters')
-        string(name: 'USERNAME',
+        string(name: 'EMAIL',
                defaultValue: '',
                description: 'Enter a username, ignored if LOGIN_DATA is set to Existing')
         password(name: 'PASSWORD',
                  defaultValue: '',
                  description: 'Enter a password, ignored if LOGIN_DATA is set to Existing')
+    }
+    environment {
+        COMBINED_PARAMS = ""
     }
     stages {
         stage('Upgrade Python Librarys') {
@@ -62,17 +65,17 @@ pipeline {
                 git branch: params.REPO_BRANCH, url: 'https://github.com/mbrunka/university_site_tests'
             }
         }
-        stage('Test Setup') {
+        stage('Combine Provided Parameters') {
             steps {
-                def combinedParams = ''
-                if (params.LOGIN_DATA == 'Existing') {
-                    combinedParams = '--variablefile C:/Jenkins/secret.py'
-                } else {
-                    combinedParams = "--variable USERNAME:${params.USERNAME} --variable PASSWORD:${params.PASSWORD}"
+                script {
+                    if (params.LOGIN_DATA == 'Existing') {
+                        COMBINED_PARAMS = '--variablefile C:/Jenkins/secret.py'
+                    } else {
+                        COMBINED_PARAMS = "--variable EMAIL:${params.EMAIL} --variable PASSWD:${params.PASSWORD}"
+                    }
+                    COMBINED_PARAMS += " --variable SEMESTER:${params.SEMESTER}"
+                    COMBINED_PARAMS += " --variable BROWSER:${params.BROWSER}"
                 }
-                combinedParams += " --variable SEMESTER:${params.SEMESTER}"
-                combinedParams += " --variable BROWSER:${params.BROWSER}"
-
             }
         }
         stage('Run Main Webpage Tests') {
@@ -86,7 +89,7 @@ pipeline {
                         --output ./results/main_page_tests_output.xml ^
                         --variablefile C:/Jenkins/secret.py ^
                         --loglevel ${params.LOG_LEVEL}:INFO ^
-                        ${combinedParams} ^
+                        ${COMBINED_PARAMS} ^
                         ${params.EXTRA_ROBOT_PARAMS} ^
                         ./tests/main_page_tests.robot ^
                     """
@@ -104,7 +107,7 @@ pipeline {
                         --output ./results/mail_page_tests_output.xml ^
                         --variablefile C:/Jenkins/secret.py ^
                         --loglevel ${params.LOG_LEVEL}:INFO ^
-                        ${combinedParams} ^
+                        ${COMBINED_PARAMS} ^
                         ${params.EXTRA_ROBOT_PARAMS} ^
                         ./tests/mail_page_tests.robot ^
                     """
@@ -122,7 +125,7 @@ pipeline {
                         --output ./results/faculty_page_tests_output.xml ^
                         --variablefile C:/Jenkins/secret.py ^
                         --loglevel ${params.LOG_LEVEL}:INFO ^
-                        ${combinedParams} ^
+                        ${COMBINED_PARAMS} ^
                         ${params.EXTRA_ROBOT_PARAMS} ^
                         ./tests/faculty_page_tests.robot ^
                     """
@@ -140,7 +143,7 @@ pipeline {
                         --output ./results/ekursy_page_tests_output.xml ^
                         --variablefile C:/Jenkins/secret.py ^
                         --loglevel ${params.LOG_LEVEL}:INFO ^
-                        ${combinedParams} ^
+                        ${COMBINED_PARAMS} ^
                         ${params.EXTRA_ROBOT_PARAMS} ^
                         ./tests/ekursy_tests.robot ^
                     """

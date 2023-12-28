@@ -72,10 +72,10 @@ Page Should Contain Any
             Log    Page does not contain string: ${string}    level=DEBUG
         ELSE
             Set Local Variable    ${success}    ${True}
-            Exit For Loop
+            BREAK
         END
-        IF    $success == $TRUE    Exit For Loop
     END
+    IF    $success != $TRUE    Fail    Page does not contain any of the strings: @{strings}
 
 Page Should Not Contain Any
     [Arguments]    @{strings}
@@ -86,7 +86,7 @@ Page Should Not Contain Any
             Log    Page contains string but shouldn't: ${string}    level=DEBUG
         ELSE
             Set Local Variable    ${success}    ${True}
-            Exit For Loop
+            BREAK
         END
-        IF    $success == $TRUE    Exit For Loop
     END
+    IF    $success != $TRUE    Fail    Page contains string: ${string}
