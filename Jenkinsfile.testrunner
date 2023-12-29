@@ -65,7 +65,7 @@ pipeline {
                 git branch: params.REPO_BRANCH, url: 'https://github.com/mbrunka/university_site_tests'
             }
         }
-        stage('Combine Provided Parameters') {
+        stage('Combine Provided Parameters and clear output folder') {
             steps {
                 script {
                     if (params.LOGIN_DATA == 'Existing') {
@@ -76,6 +76,10 @@ pipeline {
                     COMBINED_PARAMS += " --variable SEMESTER:${params.SEMESTER}"
                     COMBINED_PARAMS += " --variable BROWSER:${params.BROWSER}"
                 }
+                bat """
+                    rmdir /s /q results
+                    mkdir results
+                """
             }
         }
         stage('Run Main Webpage Tests') {
