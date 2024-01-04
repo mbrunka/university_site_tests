@@ -19,15 +19,15 @@ Variables    ../test_config/dict.py
 Login to eKrusy with invalid email
     Open Browser    ${EKURSY_URL}    ${BROWSER}
     Click Element    //*[@id="region-main"]/div[2]/div[2]/div/div[1]/div[2]/div/a
-    Verify Polish Version Of eSystem is loaded if not switch to it
-    Login By eSystem    invalid_email    ${PASSWD}
+    Verify Polish Version Of eSystem Is Loaded If Not Switch To It
+    Login By eSystem    invalid@email.pl    ${PASSWD}
     Page Should Contain    Nie znaleziono konta o podanej nazwie.
     [Teardown]    Close Browser
 
 Login to eKursy with invalid password
     Open Browser    ${EKURSY_URL}    ${BROWSER}
     Click Element    //*[@id="region-main"]/div[2]/div[2]/div/div[1]/div[2]/div/a
-    Verify Polish Version Of eSystem is loaded if not switch to it
+    Verify Polish Version Of eSystem Is Loaded If Not Switch To It
     Login By eSystem    ${EMAIL}    invalid_password
     Page Should Contain    Podano nieprawidłowe hasło.
     [Teardown]    Close Browser
@@ -35,7 +35,7 @@ Login to eKursy with invalid password
 Login to eKursy with valid password
     Open Browser    ${EKURSY_URL}    ${BROWSER}
     Click Element    //*[@id="region-main"]/div[2]/div[2]/div/div[1]/div[2]/div/a
-    Verify Polish Version Of eSystem is loaded if not switch to it
+    Verify Polish Version Of eSystem Is Loaded If Not Switch To It
     Login By eSystem    ${EMAIL}    ${PASSWD}
     Sleep    5s
     Page Should Contain    Strona główna
@@ -45,7 +45,7 @@ Login to eKursy with valid password
 Verify Nav Bar
     Open Browser    ${EKURSY_URL}    ${BROWSER}
     Click Element    //*[@id="region-main"]/div[2]/div[2]/div/div[1]/div[2]/div/a
-    Verify Polish Version Of eSystem is loaded if not switch to it
+    Verify Polish Version Of eSystem Is Loaded If Not Switch To It
     Login By eSystem    ${EMAIL}    ${PASSWD}
     Sleep    5s
     Click Element    //*[@id="nav-drawer"]/nav/ul/li[2]/a
@@ -62,7 +62,7 @@ Verify Nav Bar
 Verify messenging fuction by sending message to favorite user
     Open Browser    ${EKURSY_URL}    ${BROWSER}
     Click Element    //*[@id="region-main"]/div[2]/div[2]/div/div[1]/div[2]/div/a
-    Verify Polish Version Of eSystem is loaded if not switch to it
+    Verify Polish Version Of eSystem Is Loaded If Not Switch To It
     Login By eSystem    ${EMAIL}    ${PASSWD}
     Sleep    2s
     Click Element    //*[contains(@id,'message-drawer-toggle-')]
@@ -79,7 +79,7 @@ Verify messenging fuction by sending message to favorite user
 Verify messenging fuction by searching user
     Open Browser    ${EKURSY_URL}    ${BROWSER}
     Click Element    //*[@id="region-main"]/div[2]/div[2]/div/div[1]/div[2]/div/a
-    Verify Polish Version Of eSystem is loaded if not switch to it
+    Verify Polish Version Of eSystem Is Loaded If Not Switch To It
     Login By eSystem    ${EMAIL}    ${PASSWD}
     Sleep    2s
     Click Element    //*[contains(@id,'message-drawer-toggle-')]
@@ -99,7 +99,7 @@ Verify messenging fuction by searching user
 Clear alarms and verify
     Open Browser    ${EKURSY_URL}    ${BROWSER}
     Click Element    //*[@id="region-main"]/div[2]/div[2]/div/div[1]/div[2]/div/a
-    Verify Polish Version Of eSystem is loaded if not switch to it
+    Verify Polish Version Of eSystem Is Loaded If Not Switch To It
     Login By eSystem    ${EMAIL}    ${PASSWD}
     Sleep    2s
     Click Element    //div[@aria-label='Wyświetl okno bez nowych powiadomień']
@@ -113,7 +113,7 @@ Verify seveth semester student course list
     [Tags]    SEMESTER_7_TELEINF
     Open Browser    ${EKURSY_URL}    ${BROWSER}
     Click Element    //*[@id="region-main"]/div[2]/div[2]/div/div[1]/div[2]/div/a
-    Verify Polish Version Of eSystem is loaded if not switch to it
+    Verify Polish Version Of eSystem Is Loaded If Not Switch To It
     Login By eSystem    ${EMAIL}    ${PASSWD}
     Sleep    2s
     Click Element    //li[@class='dropdown nav-item']/a[contains(text(), 'Moje kursy')]
@@ -125,7 +125,7 @@ Verify pdf download from Cybersecurity course
     [Tags]    SEMESTER_7_TELEINF
     Open Browser    ${EKURSY_URL}    ${BROWSER}
     Click Element    //*[@id="region-main"]/div[2]/div[2]/div/div[1]/div[2]/div/a
-    Verify Polish Version Of eSystem is loaded if not switch to it
+    Verify Polish Version Of eSystem Is Loaded If Not Switch To It
     Login By eSystem    ${EMAIL}    ${PASSWD}
     Sleep    2s
     Click Element    //li[@class='dropdown nav-item']/a[contains(text(), 'Moje kursy')]
