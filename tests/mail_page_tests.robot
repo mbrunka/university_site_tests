@@ -32,6 +32,8 @@ Verify Loging to email account using normal method
     Sleep    2
     Page Should Not Contain Any    Nieznana nazwa użytkownika    Unknown username
     Get Current URL And Verify    https://poczta.student.put.poznan.pl/zimbra/mail#1
+    Reload Page
+    Get Current URL And Verify    https://poczta.student.put.poznan.pl/zimbra/mail#1
     [Teardown]    Close Browser
 
 Verify Loging to email account using eSystem
@@ -40,6 +42,8 @@ Verify Loging to email account using eSystem
     Login By eSystem    ${EMAIL}    ${PASSWD}
     Sleep    10
     Page Should Not Contain Any    Nieznana nazwa użytkownika    Unknown username
+    Get Current URL And Verify    https://poczta.student.put.poznan.pl/zimbra/mail#1
+    Reload Page
     Get Current URL And Verify    https://poczta.student.put.poznan.pl/zimbra/mail#1
     [Teardown]    Close Browser
 
@@ -52,6 +56,9 @@ Verify logout works
     Click Element    //*[@id="logOff"]
     Sleep    2
     Get Current URL And Verify    https://elogin.put.poznan.pl/email/?logout
+    Page Should Contain Textfield    //*[@id="user_name"]
+    Page Should Contain Textfield    //*[@id="user_password"]
+    Reload Page
     Page Should Contain Textfield    //*[@id="user_name"]
     Page Should Contain Textfield    //*[@id="user_password"]
     [Teardown]    Close Browser

@@ -57,7 +57,35 @@ Verify basic search function
     Click Element    //*[@id="search-block-form"]/div[1]/div/span/button
     Sleep    2s
     Page Should Not Contain    Brak wyników spełniających kryteria twojego wyszukiwania
+    Get Current URL And Verify    https://www.put.poznan.pl/search/node?keys=brandshop\
+    Click Element    //html/body/div[1]/div/div[1]/section/div/ol/li[1]/h3/a
+    Get Current URL And Verify    https://put.poznan.pl/brandshop-politechniki-poznanskiej
+    Page Should Contain    nr telefonu 61 665 3980
+    [Teardown]    Close Browser
+
+Verify continuing search
+    Open Browser    ${MAIN_PAGE_URL}    ${BROWSER}
+    Input Text    //*[@id="edit-keys"]    brandshop
+    Click Element    //*[@id="search-block-form"]/div[1]/div/span/button
+    Sleep    2s
+    Page Should Not Contain    Brak wyników spełniających kryteria twojego wyszukiwania
     Get Current URL And Verify    https://www.put.poznan.pl/search/node?keys=brandshop
+    Input Text    //*[@id="edit-keys"]    teleinformatyka
+    Click Element    //*[@id="search-block-form"]/div[1]/div/span/button
+    Get Current URL And Verify    https://www.put.poznan.pl/search/node?keys=teleinformatyka
+    Click Element    //html/body/div/div/div[1]/section/div/ol/li[1]/h3/a
+    Get Current URL And Verify    https://www.put.poznan.pl/kierunek/teleinformatyka
+    # Verify video is present
+    Page Should Contain Element    //html/body/div[1]/div/div[1]/section/div/article/div/div[1]/div[2]/section[3]/div/p[3]/iframe
+    [Teardown]    Close Browser
+
+Verify no results search
+    Open Browser    ${MAIN_PAGE_URL}    ${BROWSER}
+    Input Text    //*[@id="edit-keys"]    1fcgv125dfv
+    Click Element    //*[@id="search-block-form"]/div[1]/div/span/button
+    Sleep    2s
+    Page Should Contain    Brak wyników spełniających kryteria twojego wyszukiwania
+    Get Current URL And Verify    https://www.put.poznan.pl/search/node?keys=1fcgv125dfv
     [Teardown]    Close Browser
 
 Verify path to faculty page

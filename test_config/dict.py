@@ -27,3 +27,11 @@ language_dict = {
     },
     "chinese": {"short_name": "CN", "main_menu": ["大学", "教育", "联系我们"]},
 }
+
+sem7_teleinf_student_courses = [
+    'Cyberbezpieczeństwo',
+    'Rozproszone systemy akwitacji danych',
+    'Podstawy Przedsiębiorczości',
+    'Seminarium dyplomowe',
+    'Synchronizacja urządzeń i sieci teleinformatycznych'
+]

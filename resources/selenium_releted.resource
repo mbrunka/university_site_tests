@@ -53,8 +53,13 @@ Verify All Links On Current Webpage Are Working
     @{links}    Get WebElements    xpath://a
     FOR    ${link}    IN    @{links}
         ${href}    Get Element Attribute    ${link}    href
-        IF    $href == None or $href == ""   CONTINUE
+        IF    $href == None or $href == ""
+            CONTINUE
+        ELSE IF    'intranet' in $href and not $INTRANET
+            CONTINUE
+        ELSE
         Open URL In New Window And Verify It Loads Webpage    ${href}
+        END
     END
 
 Element Should Contain Every

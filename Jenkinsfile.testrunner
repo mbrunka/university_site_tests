@@ -47,7 +47,7 @@ pipeline {
         COMBINED_PARAMS = ""
     }
     stages {
-        stage('Upgrade Python Librarys') {
+        stage('Upgrade Python Libraries') {
             when { expression { params.UPGRADE == true } }
             steps {
                 echo 'Hello World'
@@ -91,7 +91,6 @@ pipeline {
                         --log ./results/main_page_tests_log.html ^
                         --report ./results/main_page_tests_report.html ^
                         --output ./results/main_page_tests_output.xml ^
-                        --variablefile C:/Jenkins/secret.py ^
                         --loglevel ${params.LOG_LEVEL}:INFO ^
                         ${COMBINED_PARAMS} ^
                         ${params.EXTRA_ROBOT_PARAMS} ^
@@ -109,7 +108,6 @@ pipeline {
                         --log ./results/mail_page_tests_log.html ^
                         --report ./results/mail_page_tests_report.html ^
                         --output ./results/mail_page_tests_output.xml ^
-                        --variablefile C:/Jenkins/secret.py ^
                         --loglevel ${params.LOG_LEVEL}:INFO ^
                         ${COMBINED_PARAMS} ^
                         ${params.EXTRA_ROBOT_PARAMS} ^
@@ -127,7 +125,6 @@ pipeline {
                         --log ./results/faculty_page_tests_log.html ^
                         --report ./results/faculty_page_tests_report.html ^
                         --output ./results/faculty_page_tests_output.xml ^
-                        --variablefile C:/Jenkins/secret.py ^
                         --loglevel ${params.LOG_LEVEL}:INFO ^
                         ${COMBINED_PARAMS} ^
                         ${params.EXTRA_ROBOT_PARAMS} ^
@@ -145,7 +142,6 @@ pipeline {
                         --log ./results/ekursy_page_tests_log.html ^
                         --report ./results/ekursy_page_tests_report.html ^
                         --output ./results/ekursy_page_tests_output.xml ^
-                        --variablefile C:/Jenkins/secret.py ^
                         --loglevel ${params.LOG_LEVEL}:INFO ^
                         ${COMBINED_PARAMS} ^
                         ${params.EXTRA_ROBOT_PARAMS} ^
