@@ -31,7 +31,6 @@ language_dict = {
 sem7_teleinf_student_courses = [
     "Cyberbezpieczeństwo",
     "Rozproszone systemy akwizycji danych",
-    "Podstawy Przedsiębiorczości",
-    "Seminarium dyplomowe",
+    "Podstawy przedsiębiorczości",
     "Synchronizacja urządzeń i sieci teleinformatycznych",
 ]
