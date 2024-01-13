@@ -29,9 +29,9 @@ language_dict = {
 }
 
 sem7_teleinf_student_courses = [
-    'Cyberbezpieczeństwo',
-    'Rozproszone systemy akwitacji danych',
-    'Podstawy Przedsiębiorczości',
-    'Seminarium dyplomowe',
-    'Synchronizacja urządzeń i sieci teleinformatycznych'
+    "Cyberbezpieczeństwo",
+    "Rozproszone systemy akwizycji danych",
+    "Podstawy Przedsiębiorczości",
+    "Seminarium dyplomowe",
+    "Synchronizacja urządzeń i sieci teleinformatycznych",
 ]

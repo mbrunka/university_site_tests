@@ -133,5 +133,4 @@ Verify pdf download from Cybersecurity course
     Click Element    //a[@href='https://ekursy.put.poznan.pl/mod/resource/view.php?id=1969586']
     Sleep    2s
     Page Should Contain    Cyberbezpieczeństwo
-
     [Teardown]    Run Keywords    Close Browser
