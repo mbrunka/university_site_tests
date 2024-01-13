@@ -59,7 +59,7 @@ Verify basic search function
     Page Should Not Contain    Brak wyników spełniających kryteria twojego wyszukiwania
     Get Current URL And Verify    https://www.put.poznan.pl/search/node?keys=brandshop\
     Click Element    //html/body/div[1]/div/div[1]/section/div/ol/li[1]/h3/a
-    Get Current URL And Verify    https://put.poznan.pl/brandshop-politechniki-poznanskiej
+    Get Current URL And Verify    	https://www.put.poznan.pl/brandshop-politechniki-poznanskiej
     Page Should Contain    nr telefonu 61 665 3980
     [Teardown]    Close Browser
 
@@ -74,7 +74,7 @@ Verify continuing search
     Click Element    //*[@id="search-block-form"]/div[1]/div/span/button
     Get Current URL And Verify    https://www.put.poznan.pl/search/node?keys=teleinformatyka
     Click Element    //html/body/div/div/div[1]/section/div/ol/li[1]/h3/a
-    Get Current URL And Verify    https://www.put.poznan.pl/kierunek/teleinformatyka
+    Get Current URL And Verify    https://www.put.poznan.pl/kierunek/teleinformatyka-0
     # Verify video is present
     Page Should Contain Element    //html/body/div[1]/div/div[1]/section/div/article/div/div[1]/div[2]/section[3]/div/p[3]/iframe
     [Teardown]    Close Browser
