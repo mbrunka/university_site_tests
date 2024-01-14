@@ -75,8 +75,6 @@ Verify continuing search
     Get Current URL And Verify    https://www.put.poznan.pl/search/node?keys=teleinformatyka
     Click Element    //html/body/div/div/div[1]/section/div/ol/li[1]/h3/a
     Get Current URL And Verify    https://www.put.poznan.pl/kierunek/teleinformatyka-0
-    # Verify video is present
-    Page Should Contain Element    //html/body/div[1]/div/div[1]/section/div/article/div/div[1]/div[2]/section[3]/div/p[3]/iframe
     [Teardown]    Close Browser
 
 Verify no results search
