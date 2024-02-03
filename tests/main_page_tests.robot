@@ -106,6 +106,6 @@ Verify path to eKursy
 
 Verify that all links on main page are working
     [Tags]    long
-    Open Browser      ${FACULTY_PAGE}    ${BROWSER}
+    Open Browser      ${MAIN_PAGE_URL}    ${BROWSER}
     Verify All Links On Current Webpage Are Working
     [Teardown]    Close Browser
