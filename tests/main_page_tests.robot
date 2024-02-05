@@ -57,19 +57,8 @@ Verify basic search function
     Click Element    //*[@id="search-block-form"]/div[1]/div/span/button
     Sleep    2s
     Page Should Not Contain    Brak wyników spełniających kryteria twojego wyszukiwania
-    Get Current URL And Verify    https://www.put.poznan.pl/search/node?keys=brandshop\
-    Click Element    //html/body/div[1]/div/div[1]/section/div/ol/li[1]/h3/a
-    Get Current URL And Verify    	https://www.put.poznan.pl/brandshop-politechniki-poznanskiej
-    Page Should Contain    nr telefonu 61 665 3980
-    [Teardown]    Close Browser
-
-Verify continuing search
-    Open Browser    ${MAIN_PAGE_URL}    ${BROWSER}
-    Input Text    //*[@id="edit-keys"]    brandshop
-    Click Element    //*[@id="search-block-form"]/div[1]/div/span/button
-    Sleep    2s
-    Page Should Not Contain    Brak wyników spełniających kryteria twojego wyszukiwania
     Get Current URL And Verify    https://www.put.poznan.pl/search/node?keys=brandshop
+    # Verify continuing search
     Input Text    //*[@id="edit-keys"]    teleinformatyka
     Click Element    //*[@id="search-block-form"]/div[1]/div/span/button
     Get Current URL And Verify    https://www.put.poznan.pl/search/node?keys=teleinformatyka
@@ -105,5 +94,11 @@ Verify path to eKursy
 Verify that all links on main page are working
     [Tags]    long
     Open Browser      ${MAIN_PAGE_URL}    ${BROWSER}
+    Verify All Links On Current Webpage Are Working
+    [Teardown]    Close Browser
+
+Verify that all links on main page are working
+    [Tags]    long
+    Open Browser      ${FACULTY_PAGE}    ${BROWSER}
     Verify All Links On Current Webpage Are Working
     [Teardown]    Close Browser

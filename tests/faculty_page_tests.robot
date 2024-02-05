@@ -78,9 +78,3 @@ Verify week schedule for not current semester are not available
         Should Not Contain Any    ${xml}    TYGODNIOWY PLAN ZAJĘĆ    semestr ${class}
     END
     [Teardown]    Run Keywords    Close Browser    AND    Empty Directory    ${TEMP_FOLDER}
-
-Verify that all links on main page are working
-    [Tags]    long
-    Open Browser      ${FACULTY_PAGE}    ${BROWSER}
-    Verify All Links On Current Webpage Are Working
-    [Teardown]    Close Browser
